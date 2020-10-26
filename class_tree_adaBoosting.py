@@ -37,3 +37,11 @@ ada_clf2=AdaBoostClassifier(learning_rate=0.05,n_estimators=1000)#,max_depth=3,s
 ada_clf2.fit(X_train,y_train)
 print(accuracy_score(y_test,ada_clf2.predict(X_test)))
 print(confusion_matrix(y_test,ada_clf2.predict(X_test)))
+'''
+testnew5 (rlf_clf=RandomForestClassifier(n_estimators=1000,random_state=42)
+ada_clf2=AdaBoostClassifier(learning_rate=0.05,n_estimators=1000))
+0.8977936404931862
+[[13769    51]
+ [ 1524    66]]
+
+ '''

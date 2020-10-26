@@ -50,4 +50,17 @@ print(xgb.plot_importance(xgb_clf))
 testnew 5 
 0.8933160285528877
 [[13505   315]
- [ 1329   261]]'''
+ [ 1329   261]]
+ 
+ testnew5 : best param
+
+
+ 0.900129785853342
+[[13701   119]
+ [ 1420   170]]
+{'colsample_bytree': 0.8, 'gamma': 0.2, 'max_depth': 5, 'reg_alpha': 0.01, 'subsample': 0.9}
+ 
+ 
+ 
+ 
+ '''

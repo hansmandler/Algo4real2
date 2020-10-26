@@ -49,5 +49,5 @@ X_test_s=scaler.transform(X_test)
 clf_knn_1=KNeighborsClassifier(n_neighbors=1)
 clf_knn_1.fit(X_train_s,y_train)
 '''
-print(confusion_matrix(y_test,clf_knn_1.predict(X_test_s)))
-print(accuracy_score(y_test,clf_knn_1.predict(X_test_s)))
+#print(confusion_matrix(y_test,clf_knn_1.predict(X_test_s)))
+#print(accuracy_score(y_test,clf_knn_1.predict(X_test_s)))

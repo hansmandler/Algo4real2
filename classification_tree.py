@@ -32,11 +32,16 @@ print(confusion_matrix(y_test,y_test_pred))
 
 print(accuracy_score(y_test,y_test_pred))
 '''
-
+test new7:
 [[55209   169]
  [ 6060   198]]
 [[13769    51]
  [ 1538    52]]
 0.8968851395197923
-
+test new5:
+[[55137   241]
+ [ 5919   339]]
+[[13760    60]
+ [ 1510    80]]
+0.8981181051265412
 '''

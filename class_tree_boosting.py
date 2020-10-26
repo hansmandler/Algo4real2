@@ -38,6 +38,11 @@ testnew5: (mit learningrate 0,02, estimator=1000)
  [ 1451   139]]
 0.900064892926671
 
+testn new5: (learning_rate=0.02,n_estimators=1000,max_depth=3,subsample=0.7))
+[[13723    97]
+ [ 1436   154]]
+0.9005191434133679
+
 
 
 '''

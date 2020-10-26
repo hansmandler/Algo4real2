@@ -9,7 +9,7 @@ from sklearn.metrics import confusion_matrix, accuracy_score , mean_squared_erro
 from sklearn.svm import SVR
 
 df =pd.read_csv("testnew5.csv",error_bad_lines=False,encoding = 'unicode_escape',delimiter=",",header=0,index_col=0)
-X=df.loc[:,df.columns !="LANGL"]
+X=df.loc[:,df.columnsgit !="LANGL"]
 y=(df["LANGL"]==1)
 X_train, X_test,y_train,y_test =train_test_split(X,y, test_size=0.2, random_state=0)
 

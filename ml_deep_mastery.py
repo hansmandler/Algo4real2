@@ -7,6 +7,8 @@ from keras.preprocessing.text import Tokenizer
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import Dropout
+from pandas import DataFrame
+from matplotlib import pyplot
 
 # load doc into memory
 def load_doc(filename):
@@ -62,6 +64,38 @@ def process_docs(directory, vocab, is_trian):
 		lines.append(line)
 	return lines
 
+# evaluate a neural network model
+def evaluate_mode(Xtrain, ytrain, Xtest, ytest):
+	scores = list()
+	n_repeats = 30
+	n_words = Xtest.shape[1]
+	for i in range(n_repeats):
+		# define network
+		model = Sequential()
+		model.add(Dense(50, input_shape=(n_words,), activation='relu'))
+		model.add(Dense(1, activation='sigmoid'))
+		# compile network
+		model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+		# fit network
+		model.fit(Xtrain, ytrain, epochs=50, verbose=2)
+		# evaluate
+		loss, acc = model.evaluate(Xtest, ytest, verbose=0)
+		scores.append(acc)
+		print('%d accuracy: %s' % ((i+1), acc))
+	return scores
+
+# prepare bag of words encoding of docs
+def prepare_data(train_docs, test_docs, mode):
+	# create the tokenizer
+	tokenizer = Tokenizer()
+	# fit the tokenizer on the documents
+	tokenizer.fit_on_texts(train_docs)
+	# encode training data set
+	Xtrain = tokenizer.texts_to_matrix(train_docs, mode=mode)
+	# encode training data set
+	Xtest = tokenizer.texts_to_matrix(test_docs, mode=mode)
+	return Xtrain, Xtest
+
 # load the vocabulary
 vocab_filename = 'vocab.txt'
 vocab = load_doc(vocab_filename)
@@ -70,32 +104,24 @@ vocab = set(vocab)
 # load all training reviews
 positive_lines = process_docs('txt_sentoken/pos', vocab, True)
 negative_lines = process_docs('txt_sentoken/neg', vocab, True)
-# create the tokenizer
-tokenizer = Tokenizer()
-# fit the tokenizer on the documents
-docs = negative_lines + positive_lines
-tokenizer.fit_on_texts(docs)
-# encode training data set
-Xtrain = tokenizer.texts_to_matrix(docs, mode='freq')
-ytrain = array([0 for _ in range(900)] + [1 for _ in range(900)])
-
+train_docs = negative_lines + positive_lines
 # load all test reviews
 positive_lines = process_docs('txt_sentoken/pos', vocab, False)
 negative_lines = process_docs('txt_sentoken/neg', vocab, False)
-docs = negative_lines + positive_lines
-# encode training data set
-Xtest = tokenizer.texts_to_matrix(docs, mode='freq')
+test_docs = negative_lines + positive_lines
+# prepare labels
+ytrain = array([0 for _ in range(900)] + [1 for _ in range(900)])
 ytest = array([0 for _ in range(100)] + [1 for _ in range(100)])
 
-n_words = Xtest.shape[1]
-# define network
-model = Sequential()
-model.add(Dense(50, input_shape=(n_words,), activation='relu'))
-model.add(Dense(1, activation='sigmoid'))
-# compile network
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-# fit network
-model.fit(Xtrain, ytrain, epochs=50, verbose=2)
-# evaluate
-loss, acc = model.evaluate(Xtest, ytest, verbose=0)
-print('Test Accuracy: %f' % (acc*100))
+modes = ['binary', 'count', 'tfidf', 'freq']
+results = DataFrame()
+for mode in modes:
+	# prepare data for mode
+	Xtrain, Xtest = prepare_data(train_docs, test_docs, mode)
+	# evaluate model on data for mode
+	results[mode] = evaluate_mode(Xtrain, ytrain, Xtest, ytest)
+# summarize results
+print(results.describe())
+# plot results
+results.boxplot()
+pyplot.show()
